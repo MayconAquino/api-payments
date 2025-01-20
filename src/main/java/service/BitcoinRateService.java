@@ -2,8 +2,10 @@ package service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Service
 public class BitcoinRateService {
 
     private static final String BITCOIN_RATE_API_URL = "https://api.coindesk.com/v1/bpi/currentprice/BRL.json";
