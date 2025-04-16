@@ -14,7 +14,7 @@ import java.io.IOException;
 @Service
 public class QRCodeGenerationService {
 
-    public  byte[] generateQRCode(String walletAddress, double amount) throws WriterException, IOException {
+    public byte[] generateQRCode(String walletAddress, double amount) throws WriterException, IOException {
         String bitcoinURI = String.format("bitcoin:%s?amount=%.8f", walletAddress, amount);
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
