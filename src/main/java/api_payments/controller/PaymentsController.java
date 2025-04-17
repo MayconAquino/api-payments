@@ -47,14 +47,12 @@ public class PaymentsController {
         BigDecimal bitcoinCotacao = BigDecimal.valueOf(bitcoinCotacaoEmReais);
 
         BigDecimal amountBitcoin = BigDecimal.valueOf(amount).divide(bitcoinCotacao, 8, RoundingMode.HALF_UP);
-        System.out.println("amountBitcoin: " + amountBitcoin);
 
         TransacaoPagamento transacao = pagamentoService.criarTransacao(walletAddress, amountBitcoin);
 
         byte[] qrCodeBytes = qrCodeGenerationService.generateQRCode(walletAddress, amountBitcoin);
 
         String qrCodeBase64 = Base64.getEncoder().encodeToString(qrCodeBytes);
-        System.out.println("QR CODE EM BYTE: " + qrCodeBase64);
 
         QRCodeResponse response = new QRCodeResponse();
         response.setQrCodeImage(qrCodeBase64);

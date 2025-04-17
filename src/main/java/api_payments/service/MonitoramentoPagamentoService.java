@@ -11,6 +11,8 @@ import org.springframework.web.client.RestTemplate;
 import api_payments.repository.TransacaoPagamentoRepository;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,14 +26,23 @@ public class MonitoramentoPagamentoService {
     @Scheduled(fixedDelay = 10000)
     public void verificarPagamentos() {
         List<TransacaoPagamento> pendentes = repository.findByStatus(StatusPagamento.PENDENTE);
+        LocalDateTime agora = LocalDateTime.now();
+
         for (TransacaoPagamento t : pendentes) {
-            if (verificarNaBlockchain(t.getwalletAddress(), t.getValorBTC())) {
-                t.setStatus(StatusPagamento.PAGO);
+            if (Duration.between(t.getDataCriacao(), agora).toMinutes() < 30) {
+                if (verificarNaBlockchain(t.getwalletAddress(), t.getValorBTC())) {
+                    t.setStatus(StatusPagamento.PAGO);
+                    repository.save(t);
+                    System.out.println("Pagamento confirmado para transação: " + t.getId());
+                }
+            } else {
+                t.setStatus(StatusPagamento.EXPIRADO);
                 repository.save(t);
-                System.out.println("Pagamento confirmado para transação: " + t.getId());
+                System.out.println("Pagamento expirado para transação: " + t.getId());
             }
         }
     }
+
 
     private boolean verificarNaBlockchain(String wallet, BigDecimal valorBTC) {
         try {
@@ -49,7 +60,11 @@ public class MonitoramentoPagamentoService {
                                 .valueOf(valorRecebido)
                                 .setScale(8, BigDecimal.ROUND_HALF_UP);
 
-                        if (valorRecebidoBig.compareTo(valorBTC) >= 0) {
+                        BigDecimal margemDeErro = new BigDecimal("0.01");
+                        BigDecimal valorMinimo = valorBTC.subtract(margemDeErro);
+                        BigDecimal valorMaximo = valorBTC.add(margemDeErro);
+
+                        if (valorRecebidoBig.compareTo(valorMinimo) >= 0 && valorRecebidoBig.compareTo(valorMaximo) <= 0) {
                             return true;
                         }
                     }

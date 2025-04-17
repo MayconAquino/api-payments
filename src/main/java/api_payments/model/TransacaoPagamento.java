@@ -4,6 +4,7 @@ import api_payments.ENUMs.StatusPagamento;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transacao_pagamento")
@@ -20,6 +21,17 @@ public class TransacaoPagamento {
 
     @Enumerated(EnumType.STRING)
     private StatusPagamento status;
+
+    @Column(name = "data_criacao")
+    private LocalDateTime dataCriacao = LocalDateTime.now();
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
 
     public Long getId() {
         return id;
