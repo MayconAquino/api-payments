@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.http.HttpMethod;
-import service.BitcoinRateService;
+import api_payments.service.BitcoinRateService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;

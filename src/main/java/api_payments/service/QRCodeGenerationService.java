@@ -1,4 +1,4 @@
-package service;
+package api_payments.service;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -10,11 +10,12 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @Service
 public class QRCodeGenerationService {
 
-    public byte[] generateQRCode(String walletAddress, double amount) throws WriterException, IOException {
+    public byte[] generateQRCode(String walletAddress, BigDecimal amount) throws WriterException, IOException {
         String bitcoinURI = String.format("bitcoin:%s?amount=%.8f", walletAddress, amount);
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();

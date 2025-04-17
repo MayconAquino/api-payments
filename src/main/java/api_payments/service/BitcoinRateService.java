@@ -1,4 +1,4 @@
-package service;
+package api_payments.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
